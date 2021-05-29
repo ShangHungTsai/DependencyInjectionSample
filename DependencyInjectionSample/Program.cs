@@ -23,12 +23,44 @@ namespace DependencyInjectionSample
             container.RegisterType<IWeapon, Gun>();
             //container.RegisterType<IWeapon, Knife>();
 
+            container.RegisterType<IPeople, WhitePeople>();
+            //container.RegisterType<IWeapon, BlackPeople>();
+
             // 解析IOC容器取得註冊的執行個體。
             // 讓People類別 原本依賴Gun的部分，轉而依賴IOC
+            var person = container.Resolve<Person>();
+            person.Introduction();
+            person.Kill("Sammy");
+
             var people = container.Resolve<People>();
             people.Kill("Max");
-
             Console.ReadKey();
+        }
+        public interface IPeople {
+            string Race();
+        }
+        public class WhitePeople : IPeople {
+            public string Race() { return "白種人"; }
+        }
+
+        public class Person 
+        {
+            private readonly IPeople _people;
+            private readonly IWeapon _weapon;
+
+            public Person(IPeople p,IWeapon w) 
+            {
+                _people = p;
+                _weapon = w;
+            }
+            public void Introduction() 
+            {
+                Console.WriteLine("我是" + _people.Race());
+            }
+            public void Kill(string name) 
+            { 
+                Console.WriteLine( _weapon.Fire() + " the Person," + name); 
+            }
         }
 
         public class People
