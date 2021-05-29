@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DependencyInjectionSample.Controllers;
+using DependencyInjectionSample.Interfaces;
+using DependencyInjectionSample.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,64 +38,6 @@ namespace DependencyInjectionSample
             var people = container.Resolve<People>();
             people.Kill("Max");
             Console.ReadKey();
-        }
-        public interface IPeople {
-            string Race();
-        }
-        public class WhitePeople : IPeople {
-            public string Race() { return "白種人"; }
-        }
-
-        public class Person 
-        {
-            private readonly IPeople _people;
-            private readonly IWeapon _weapon;
-
-            public Person(IPeople p,IWeapon w) 
-            {
-                _people = p;
-                _weapon = w;
-            }
-            public void Introduction() 
-            {
-                Console.WriteLine("我是" + _people.Race());
-            }
-            public void Kill(string name) 
-            { 
-                Console.WriteLine( _weapon.Fire() + " the Person," + name); 
-            }
-        }
-
-        public class People
-        {
-            //People物件依賴類別Gun
-            private Gun _gun = new Gun();
-
-            //透過介面取得控制反轉後的物件
-            private readonly IWeapon _weapon;
-
-            public People(IWeapon w)
-            {
-                _weapon = w;
-            }
-
-            //使用介面中物件的方法
-            public void Kill(string name) { Console.WriteLine(_weapon.Fire() + " the Person," + name); }
-        }
-
-        public class Gun : IWeapon
-        {
-            public string Fire() { return "蹦蹦"; }
-        }
-
-        public class Knife : IWeapon
-        {
-            public string Fire() { return "砍"; }
-        }
-
-        public interface IWeapon
-        {
-            string Fire();
         }
     }
 }
